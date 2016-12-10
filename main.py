@@ -9,7 +9,7 @@ SX9_URL = 'http://sx9.jp/weather/kyoto-yoshida.js'
 
 def main():
     r = requests.get(SX9_URL)
-    p = re.compile(r'\((\d), (\d+), (\d+)\)')
+    p = re.compile(r'\((\d+), (\d+), (\d+)\)')
     data = [x.strip() for x in r.text.splitlines() if 'data.setValue(5,' in x][1:]
     data2 = [x.strip() for x in r.text.splitlines() if 'data.setValue(60,' in x][1:]
     poe = []
