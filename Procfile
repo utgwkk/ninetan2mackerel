@@ -1,1 +1,1 @@
-sx9: python main.py
+web: python main.py
