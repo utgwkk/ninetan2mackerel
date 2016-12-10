@@ -24,7 +24,7 @@ def main():
             'name': 'sx9.yoshida', 
             'time': int(time.strftime('%s', time.localtime())),
             'value': max(poe)
-        }
+        },
     ]
     r = requests.post(MACKEREL_URL, data=json.dumps(payload), headers=headers)
     print(r.status_code)
