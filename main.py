@@ -6,20 +6,25 @@ import requests
 from config import MACKEREL_URL, MACKEREL_API_KEY
 
 SX9_URL = 'http://sx9.jp/weather/kyoto-yoshida.js'
+p = re.compile(r'\((\d+), (\d+), (\d+)\)')
 
-def main():
-    r = requests.get(SX9_URL)
-    p = re.compile(r'\((\d+), (\d+), (\d+)\)')
-    data = [x.strip() for x in r.text.splitlines() if 'data.setValue(5,' in x][1:]
-    data2 = [x.strip() for x in r.text.splitlines() if 'data.setValue(60,' in x][1:]
+def parse(text, minute=0):
+    data = [x.strip() for x in text.splitlines() if 'data.setValue(5,' in x][1:]
     poe = []
-    poe2 = []
+
     for line in data:
         m = p.search(line)
         poe.append(int(m.group(3)))
-    for line in data2:
-        m = p.search(line)
-        poe2.append(int(m.group(3)))
+
+    return max(poe)
+
+def main():
+    r = requests.get(SX9_URL)
+    r.raise_for_status()
+    text = r.text
+    yoshida = parse(text, 5)
+    yoshida_1h = parse(text, 60)
+
     headers = {
         'X-Api-Key': MACKEREL_API_KEY,
         'Content-Type': 'application/json'
@@ -28,12 +33,12 @@ def main():
         {
             'name': 'sx9.yoshida', 
             'time': int(time.strftime('%s', time.localtime())),
-            'value': max(poe)
+            'value': yoshida
         },
         {
             'name': 'sx9.yoshida_1h', 
             'time': int(time.strftime('%s', time.localtime())),
-            'value': max(poe2)
+            'value': yoshida_1h
         },
     ]
     r = requests.post(MACKEREL_URL, data=json.dumps(payload), headers=headers)
