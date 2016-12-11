@@ -9,7 +9,7 @@ SX9_URL = 'http://sx9.jp/weather/kyoto-yoshida.js'
 p = re.compile(r'\((\d+), (\d+), (\d+)\)')
 
 def parse(text, minute=0):
-    data = [x.strip() for x in text.splitlines() if 'data.setValue(5,' in x][1:]
+    data = [x.strip() for x in text.splitlines() if 'data.setValue({},'.format(minute) in x][1:]
     poe = []
 
     for line in data:
