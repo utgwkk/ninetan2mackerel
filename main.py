@@ -1,12 +1,15 @@
 #!/usr/bin/python
+import os
 import re
 import time
 import json
 import requests
-from config import MACKEREL_URL, MACKEREL_API_KEY
 
 SX9_URL = 'http://sx9.jp/weather/kyoto-yoshida.js'
 p = re.compile(r'\((\d+), (\d+), (\d+)\)')
+
+MACKEREL_URL = os.environ['MACKEREL_URL']
+MACKEREL_API_KEY = os.environ['MACKEREL_API_KEY']
 
 def parse(text, minute=0):
     data = [x.strip() for x in text.splitlines() if 'data.setValue({},'.format(minute) in x][1:]

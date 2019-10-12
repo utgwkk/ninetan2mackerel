@@ -5,7 +5,6 @@
 
 ```
 $ pipenv install
-$ nano config.py
 $ sh start.sh
 ```
 
