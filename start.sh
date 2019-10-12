@@ -1,5 +1,5 @@
 while :
 do
-  python main.py
+  pipenv run python main.py
   sleep 60
 done
